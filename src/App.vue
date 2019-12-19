@@ -65,10 +65,10 @@ export default class App extends Vue {
       const times = Math.ceil(time / 16);
       let speedX = Number((args.deltaX / times).toFixed(4));
       let speedY = Number((args.deltaY / times).toFixed(4));
-      let scaleS = Number((1 / times).toFixed(4));
+      let scaleS = Number(((1 - args.deltaW) / times).toFixed(4));
       let transX = args.deltaX;
       let transY = args.deltaY;
-      let scale = 0;
+      let scale = args.deltaW;
       if (direction === "reverse") {
         speedX = -speedX;
         speedY = -speedY;
@@ -129,13 +129,7 @@ export default class App extends Vue {
     //   done(); //调用done() 告诉vue动画已完成，以触发 afterEnter 钩子
     // });
     if (this.flipName === "flipEnter") {
-      const lastReact = el.getBoundingClientRect();
-      // console.log("enter lastReact", lastReact);
-      const Invert = {
-        deltaX: this.firstRect.left - lastReact.left,
-        deltaY: this.firstRect.top - lastReact.top,
-        deltaW: this.firstRect.height / lastReact.height
-      };
+      const Invert = this.getInvert(el);
       // console.log("enter Invert", Invert);
       this.animateFn(el, Invert, "normal", this.speed, done);
     } else {
@@ -154,18 +148,20 @@ export default class App extends Vue {
     // console.log("beforeleave el", el);
     // el.style.cssText = `position: absolute;transition: transform ${this.speed}ms;transform: translate(0, 0);`;
   }
+  private getInvert(el: any) {
+    const lastReact = el.getBoundingClientRect();
+    return {
+      deltaX: this.firstRect.left - lastReact.left,
+      deltaY: this.firstRect.top - lastReact.top,
+      deltaW: this.firstRect.height / lastReact.height
+    };
+  }
   private leave(el: any, done: any) {
     el.style.cssText = "position:absolute;z-index:-1";
 
     if (this.flipName === "flipLeave") {
       el.style.cssText = "position:absolute;z-index:1";
-      const lastReact = el.getBoundingClientRect();
-      // console.log("leave lastReact", lastReact);
-      const Invert = {
-        deltaX: this.firstRect.left - lastReact.left,
-        deltaY: this.firstRect.top - lastReact.top,
-        deltaW: this.firstRect.height / lastReact.height
-      };
+      const Invert = this.getInvert(el);
       // console.log("leave Invert", Invert);
       this.animateFn(el, Invert, "reverse", this.speed, done);
     } else {
@@ -228,14 +224,8 @@ export default class App extends Vue {
       case "forward":
         transition = "back";
         break;
-      case "back":
-        transition = "forward";
-        break;
       case "up":
         transition = "down";
-        break;
-      case "down":
-        transition = "up";
         break;
       case "flipEnter":
         transition = "flipLeave";
@@ -286,182 +276,5 @@ export default class App extends Vue {
 </script>
 
 <style lang="scss">
-* {
-  padding: 0;
-  margin: 0;
-}
-html,
-body,
-#app {
-  width: 100%;
-  height: 100%;
-}
-.animated {
-  animation-duration: 250ms;
-  animation-fill-mode: none;
-  position: absolute;
-  backface-visibility: hidden;
-  perspective: 1000;
-  height: 100%;
-  pointer-events: none;
-}
-
-.animated.infinite {
-  animation-iteration-count: infinite;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-.fadeIn {
-  animation-name: fadeIn;
-}
-
-@keyframes fadeOut {
-  from {
-    opacity: 1;
-  }
-
-  to {
-    opacity: 0;
-  }
-}
-
-.fadeOut {
-  animation-name: fadeOut;
-}
-
-@keyframes slideInDown {
-  from {
-    transform: translate3d(0, -100%, 0);
-    //visibility: visible;
-    opacity: 0;
-  }
-
-  to {
-    transform: translate3d(0, 0, 0);
-    opacity: 1;
-  }
-}
-
-.slideInDown {
-  animation-name: slideInDown;
-}
-
-@keyframes slideInLeft {
-  from {
-    transform: translate3d(-100%, 0, 0);
-    //visibility: visible;
-    opacity: 0;
-  }
-
-  to {
-    transform: translate3d(0, 0, 0);
-    opacity: 1;
-  }
-}
-
-.slideInLeft {
-  animation-name: slideInLeft;
-}
-
-@keyframes slideInRight {
-  from {
-    transform: translate3d(100%, 0, 0);
-    //visibility: visible;
-    opacity: 0;
-  }
-
-  to {
-    transform: translate3d(0, 0, 0);
-    opacity: 1;
-  }
-}
-
-.slideInRight {
-  animation-name: slideInRight;
-}
-
-@keyframes slideInUp {
-  from {
-    transform: translate3d(0, 100%, 0);
-    //visibility: visible;
-    opacity: 0;
-  }
-
-  to {
-    transform: translate3d(0, 0, 0);
-    opacity: 1;
-  }
-}
-
-.slideInUp {
-  animation-name: slideInUp;
-}
-
-@keyframes slideOutDown {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-
-  to {
-    visibility: hidden;
-    transform: translate3d(0, 100%, 0);
-  }
-}
-
-.slideOutDown {
-  animation-name: slideOutDown;
-}
-
-@keyframes slideOutLeft {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-
-  to {
-    visibility: hidden;
-    transform: translate3d(-100%, 0, 0);
-  }
-}
-
-.slideOutLeft {
-  animation-name: slideOutLeft;
-}
-
-@keyframes slideOutRight {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-
-  to {
-    visibility: hidden;
-    transform: translate3d(100%, 0, 0);
-  }
-}
-
-.slideOutRight {
-  animation-name: slideOutRight;
-}
-
-@keyframes slideOutUp {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-
-  to {
-    visibility: hidden;
-    transform: translate3d(0, -100%, 0);
-  }
-}
-.slideOutUp {
-  animation-name: slideOutUp;
-}
+@import "@/assets/base.scss";
 </style>
