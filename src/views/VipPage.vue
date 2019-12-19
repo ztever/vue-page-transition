@@ -1,7 +1,7 @@
 <template>
-  <div class="about">
+  <div class="vip-page">
     <p class="back" @click="backPrePage">click back to home</p>
-    <h1>This is about page</h1>
+    this is vip page
   </div>
 </template>
 
@@ -10,23 +10,27 @@ import { Component, Vue } from "vue-property-decorator";
 @Component({
   components: {}
 })
-export default class Home extends Vue {
+export default class VipPage extends Vue {
   private backPrePage() {
     this.$router.go(-1);
   }
 }
 </script>
 
-<style lang="scss" scoped>
-.about {
-  background: #6ab6fc;
-  color: #fff;
-  height: 100%;
+<style scoped lang="scss">
+.vip-page {
   width: 100%;
+  height: 100%;
+  background: pink;
+  color: red;
+  font-size: 30px;
+  line-height: 100px;
+  text-align: center;
   .back {
     padding: 40px 20px 20px;
     font-size: 20px;
     color: #333;
+    text-align: left;
   }
 }
 </style>
