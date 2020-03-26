@@ -12,7 +12,7 @@ body,
 
 .animated {
   animation-duration: 250ms;
-  animation-fill-mode: none;
+  animation-fill-mode: forwards;
   position: absolute;
   backface-visibility: hidden;
   perspective: 1000px;
