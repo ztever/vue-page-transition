@@ -166,8 +166,8 @@ export default class App extends Vue {
       this.animateFn(el, Invert, "reverse", this.speed, done);
     } else {
       setTimeout(() => {
-        el.style.cssText = "";
         done();
+        el.style.cssText = "";
       }, this.speed + 100);
     }
   }

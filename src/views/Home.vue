@@ -26,7 +26,8 @@ import { Component, Vue } from "vue-property-decorator";
   components: {}
 })
 export default class Home extends Vue {
-  private itemList: string[] = ["😊", "😂", "🌹", "👏", "👩"];
+  private itemList: string[] = ["😊", "😂", "🌹", "👏", "👩", "👏"];
+  private scrollValue: number = 0;
 
   private routerpush() {
     this.$router.push({
@@ -56,6 +57,18 @@ export default class Home extends Vue {
         routerTransition: "up"
       }
     });
+  }
+
+  private activated() {
+    (document.querySelector(
+      ".home"
+    ) as HTMLElement).scrollTop = this.scrollValue;
+  }
+
+  private deactivated() {
+    this.scrollValue = (document.querySelector(
+      ".home"
+    ) as HTMLElement).scrollTop;
   }
 }
 </script>
