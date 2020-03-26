@@ -81,6 +81,7 @@ export default class Home extends Vue {
   overflow-y: auto;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
+  // animation: 0; 不能设置为0，否则home页路由动画会消失
   .title {
     font-size: 16px;
     line-height: 80px;
